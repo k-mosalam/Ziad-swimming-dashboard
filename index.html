@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziad Swimming Performance Dashboard</title>
+
+<!--
+=========================================================
+Ziad Swimming Performance Dashboard
+=========================================================
+
+LOCAL TESTING:
+1. Save this file as index.html.
+2. Put it in the same folder as the photos:
+   - wc short course meet -199.jpg
+   - wc short course meet -198.jpg
+   - wc short course meet -214.jpg
+   - wc short course meet -212.jpg
+   - wc short course meet -210.jpg
+3. Double-click index.html to test locally.
+4. Photos should load immediately.
+5. Videos should load if the Google Drive permissions are correct.
+6. Google Sheets tables will show only after you paste the published Google Sheets URLs below.
+
+GOOGLE SHEETS EMBED SETUP:
+1. Upload each Excel file to Google Drive.
+2. Right-click each file -> Open with -> Google Sheets.
+3. In Google Sheets: File -> Share -> Publish to web.
+4. Choose "Entire document" and "Web page", then click Publish.
+5. Copy the published link. It should look like:
+   https://docs.google.com/spreadsheets/d/XXXXXXXX/pubhtml
+6. Replace the two placeholder URLs below:
+   MAIN_TRACKER_GOOGLE_SHEET_URL
+   RECENT_MEET_GOOGLE_SHEET_URL
+7. Save index.html and reload the page.
+
+FINAL SHARING:
+- Best option: upload this index.html and images to GitHub Pages or Netlify.
+- Videos and sheets can remain in Google Drive/Google Sheets as embedded links.
+- If you only use Google Drive as storage, Ziad can download the folder and open index.html locally.
+=========================================================
+-->
+
+<style>
+  :root {
+    --blue: #1f4e78;
+    --blue-dark: #163a59;
+    --bg: #f6f8fb;
+    --text: #1f2937;
+    --muted: #4b5563;
+    --red: #c00000;
+    --red-bg: #f4cccc;
+    --green-bg: #e8f5e9;
+    --yellow-bg: #fff3cd;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+    color: white;
+    padding: 30px 36px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 30px;
+  }
+
+  .subtitle {
+    margin-top: 8px;
+    opacity: 0.92;
+    font-size: 15px;
+  }
+
+  main {
+    padding: 24px 36px 56px;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  h2.section-title {
+    margin-top: 36px;
+    color: var(--blue);
+    border-bottom: 3px solid #d8e2ef;
+    padding-bottom: 8px;
+  }
+
+  .linkbar {
+    margin-bottom: 18px;
+  }
+
+  .linkbar a {
+    display: inline-block;
+    margin: 8px 10px 8px 0;
+    padding: 10px 14px;
+    background: var(--blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+  .linkbar a:hover {
+    background: var(--blue-dark);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .card h2, .card h3 {
+    margin-top: 0;
+    color: var(--blue);
+  }
+
+  .small {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .flag {
+    background: var(--red-bg);
+    color: var(--red);
+    font-weight: 900;
+    border: 2px solid var(--red);
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 0.4px;
+    margin-top: 12px;
+  }
+
+  .metric {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--blue-dark);
+    margin: 8px 0 2px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #e5edf7;
+    color: var(--blue-dark);
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 3px 3px 3px 0;
+  }
+
+  .tag-red {
+    background: var(--red-bg);
+    color: var(--red);
+  }
+
+  .tag-yellow {
+    background: var(--yellow-bg);
+    color: #8a5a00;
+  }
+
+  .tag-green {
+    background: var(--green-bg);
+    color: #1b5e20;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+
+  th {
+    background: var(--blue);
+    color: white;
+    text-align: left;
+    padding: 10px;
+  }
+
+  td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+  }
+
+  img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+  }
+
+  iframe {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    background: #111827;
+  }
+
+  .placeholder {
+    border: 2px dashed #9ca3af;
+    background: #f9fafb;
+    color: #374151;
+    padding: 18px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+
+  .footer-note {
+    margin-top: 36px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Ziad Swimming Performance Dashboard</h1>
+  <div class="subtitle">Race notes, contextual factors, photos, videos, and embedded performance data</div>
+</header>
+
+<main>
+
+  <div class="linkbar">
+    <a href="#coach-summary">Coach Summary</a>
+    <a href="#race-notes">Race Notes</a>
+    <a href="#photos">Photos</a>
+    <a href="#videos">Videos</a>
+    <a href="#data">Performance Data</a>
+    <a href="#next-actions">Next Actions</a>
+  </div>
+
+  <!-- COACH SUMMARY / ANALYTICS -->
+  <section id="coach-summary">
+    <h2 class="section-title">Coach Summary</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Main Technical Flag</h3>
+        <div class="flag">HAND SLIPPED ON BLOCKS</div>
+        <p class="small">
+          This should be treated as a major start-quality issue when interpreting the race time.
+          The time may not reflect true swimming capacity because the start was compromised.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Key Variables to Track</h3>
+        <span class="tag tag-red">Start / Blocks</span>
+        <span class="tag">Warm-up</span>
+        <span class="tag">Caffeine</span>
+        <span class="tag">Suit comfort</span>
+        <span class="tag">Shaving</span>
+        <span class="tag">Dolphin kicks</span>
+        <p class="small">
+          These contextual variables should be logged next to each race to explain performance differences.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Working Hypotheses</h3>
+        <p><b>1.</b> Poor or slippery blocks may reduce start effectiveness.</p>
+        <p><b>2.</b> Caffeine dose and warm-up type may affect explosiveness and comfort.</p>
+        <p><b>3.</b> New suit discomfort may affect body position and confidence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RACE NOTES -->
+  <section id="race-notes">
+    <h2 class="section-title">Race Notes</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Walnut Creek — Short Course Meters</h2>
+        <p><b>Blocks:</b> small, slippery, bad blocks.</p>
+        <p><b>Interpretation:</b> compare cautiously with races using better blocks.</p>
+        <span class="tag tag-yellow">Block quality issue</span>
+      </div>
+
+      <div class="card">
+        <h2>Davis Meet</h2>
+        <p><b>Blocks:</b> bad blocks.</p>
+        <p><b>Warm-up:</b> jump rope warm-up.</p>
+        <p><b>Caffeine:</b> 200 mg caffeine in pre-workout form.</p>
+        <span class="tag">200 mg caffeine</span>
+        <span class="tag tag-yellow">Bad blocks</span>
+      </div>
+
+      <div class="card">
+        <h2>USMS Spring Nationals</h2>
+        <p><b>Equipment:</b> new suit; felt uncomfortable.</p>
+        <p><b>Caffeine:</b> 300 mg caffeine, 1.5 pills.</p>
+        <p><b>Warm-up:</b> good warm-up.</p>
+        <p><b>Body prep:</b> fully shaved.</p>
+        <p><b>Race execution:</b> 5 dolphin kicks on Lap 1; 4 dolphin kicks on Lap 2.</p>
+        <div class="flag">HAND SLIPPED ON BLOCKS</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Race-Context Table</h2>
+    <table>
+      <tr>
+        <th>Meet / Race</th>
+        <th>Start / Blocks</th>
+        <th>Warm-up</th>
+        <th>Caffeine</th>
+        <th>Equipment / Execution</th>
+        <th>Flag</th>
+      </tr>
+      <tr>
+        <td>Walnut Creek SCM</td>
+        <td>Small, slippery, bad blocks</td>
+        <td>Not listed</td>
+        <td>Not listed</td>
+        <td>Use for comparison with cleaner-start races</td>
+        <td>Block quality issue</td>
+      </tr>
+      <tr>
+        <td>Davis</td>
+        <td>Bad blocks</td>
+        <td>Jump rope warm-up</td>
+        <td>200 mg pre-workout</td>
+        <td>Track caffeine and warm-up effect</td>
+        <td>Context factor</td>
+      </tr>
+      <tr>
+        <td>USMS Spring Nationals</td>
+        <td><b style="color:#c00000;">HAND SLIPPED ON BLOCKS</b></td>
+        <td>Good</td>
+        <td>300 mg, 1.5 pills</td>
+        <td>New suit uncomfortable; fully shaved; 5 dolphin kicks Lap 1, 4 Lap 2</td>
+        <td><b style="color:#c00000;">Critical</b></td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- PHOTOS -->
+  <section id="photos">
+    <h2 class="section-title">Race Photo Review</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Start Phase</h2>
+        <img src="wc short course meet -199.jpg" alt="Start phase photo">
+        <p class="small">Check hand placement, hip height, balance, and grip before leaving the block.</p>
+      </div>
+
+      <div class="card">
+        <h2>Block Exit</h2>
+        <img src="wc short course meet -198.jpg" alt="Block exit photo">
+        <p class="small">Review push-off direction, body line, and whether any slip affected trajectory.</p>
+      </div>
+
+      <div class="card">
+        <h2>Stroke Snapshot</h2>
+        <img src="wc short course meet -214.jpg" alt="Stroke snapshot photo">
+        <p class="small">Look for symmetry, catch position, and whether the head/body line stays stable.</p>
+      </div>
+
+      <div class="card">
+        <h2>Mid-Race Form</h2>
+        <img src="wc short course meet -212.jpg" alt="Mid-race form photo">
+        <p class="small">Check body position, rotation, and efficiency under fatigue.</p>
+      </div>
+
+      <div class="card">
+        <h2>Approach / Finish</h2>
+        <img src="wc short course meet -210.jpg" alt="Approach or finish photo">
+        <p class="small">Review timing, reach, and whether the finish was long or short.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEOS -->
+  <section id="videos">
+    <h2 class="section-title">Video Review</h2>
+
+    <div class="card">
+      <h2>USMS Spring Nationals — 50 Free / Even Heats</h2>
+      <iframe height="430"
+        src="https://drive.google.com/file/d/1iKRS0NghORGkyLZYoppJjYj_hCq199PD/preview"
+        allow="autoplay">
+      </iframe>
+      <p><b>Review focus:</b> hand slipping on the blocks, reaction/start position, underwater dolphin kicks, breakout, stroke tempo, and finish.</p>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <h2>Ziad — 50m Breast</h2>
+      <iframe height="430"
+        src="https://drive.google.com/file/d/1TWOyGxxBe9lZX8CoHpHWao4HTYFU8fer/preview"
+        allow="autoplay">
+      </iframe>
+      <p><b>Review focus:</b> start, pullout, breakout, tempo consistency, and finish.</p>
+    </div>
+  </section>
+
+  <!-- EMBEDDED PERFORMANCE DATA -->
+  <section id="data">
+    <h2 class="section-title">Performance Data</h2>
+
+    <div class="card">
+      <h2>Main Tracker</h2>
+
+      <!--
+      Replace MAIN_TRACKER_GOOGLE_SHEET_URL below with your published Google Sheets URL.
+      Example:
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-.../pubhtml?widget=true&amp;headers=false"
+      -->
+      <iframe
+        height="620"
+        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQQd87K_chnPNABYC8Hn6hKMPZuJDOqOgtFgHg7YEu3wnXryxDgTsAYBg2NxRLB4A/pubhtml">
+      </iframe>
+
+      <div class="placeholder">
+        If this box does not show the spreadsheet yet, replace
+        <b>MAIN_TRACKER_GOOGLE_SHEET_URL</b> in the HTML with the published Google Sheets embed link.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <h2>Recent Meet Results</h2>
+
+      <!--
+      Replace RECENT_MEET_GOOGLE_SHEET_URL below with your published Google Sheets URL.
+      -->
+      <iframe
+        height="620"
+        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQHm0b1CVdR4jcY9SiPp87zltJ0gjrLfScUUwzO1hZTyyi0DINqnvHie5P2RDtsSg/pubhtml">
+      </iframe>
+
+      <div class="placeholder">
+        If this box does not show the spreadsheet yet, replace
+        <b>RECENT_MEET_GOOGLE_SHEET_URL</b> in the HTML with the published Google Sheets embed link.
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT ACTIONS -->
+  <section id="next-actions">
+    <h2 class="section-title">Next Actions</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Before Each Race</h3>
+        <p>Log warm-up, caffeine amount/timing, suit, shaving, block feel, and confidence level.</p>
+      </div>
+
+      <div class="card">
+        <h3>Immediately After Each Race</h3>
+        <p>Record start quality from 1–5 and add any major issue such as slipping, poor breakout, or mistimed finish.</p>
+      </div>
+
+      <div class="card">
+        <h3>After Video Review</h3>
+        <p>Update notes on start, underwater kicks, breakout, tempo, stroke mechanics, turn/finish, and any avoidable time loss.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">
+    Internal family/coaching page for Ziad’s swimming performance review.
+  </div>
+
+</main>
+
+</body>
+</html>
